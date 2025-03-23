@@ -25,7 +25,7 @@ The **PoyoBacklogg** is a full-stack web application designed to help gamers org
 
 ---
 
-### **Screenshots **
+### Screenshots
 
 **Registration and Login Page** 
 
