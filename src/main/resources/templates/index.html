@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Tracker</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .game-card {
+            transition: transform 0.2s;
+        }
+        .game-card:hover {
+            transform: scale(1.03);
+        }
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-4">
+        <!-- Navigation -->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+            <div class="container-fluid">
+                <a class="navbar-brand" href="#">Game Tracker</a>
+                <div class="d-flex">
+                    <a th:href="@{/games/search}" class="btn btn-outline-light me-2">Search Games</a>
+                    <a th:href="@{/logout}" class="btn btn-outline-danger">Logout</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Status Tabs -->
+        <ul class="nav nav-tabs mb-4" id="statusTabs">
+            <li class="nav-item">
+                <a class="nav-link active" data-bs-toggle="tab" href="#playing">Playing</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#completed">Completed</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link" data-bs-toggle="tab" href="#backlog">Backlog</a>
+            </li>
+        </ul>
+
+        <!-- Game Lists -->
+        <div class="tab-content">
+            <!-- Playing Games -->
+            <div class="tab-pane fade show active" id="playing">
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <div class="col" th:each="game : ${playingGames}">
+                        <div class="card game-card h-100">
+                            <img th:src="${game.backgroundImage}" class="card-img-top" alt="Game cover">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${game.name}"></h5>
+                                <p class="card-text" th:text="${game.description}"></p>
+                            </div>
+                            <div class="card-footer">
+                                <a th:href="@{/games/{id}/status(id=${game.id}, status='COMPLETED')}" 
+                                   class="btn btn-success btn-sm">Mark Completed</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Completed Games -->
+            <div class="tab-pane fade" id="completed">
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <!-- Similar structure as playing games -->
+                </div>
+            </div>
+
+            <!-- Backlog Games -->
+            <div class="tab-pane fade" id="backlog">
+                <div class="row row-cols-1 row-cols-md-3 g-4">
+                    <!-- Similar structure as playing games -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,6 +1,9 @@
 package com.spingweb.PoyoBacklog.service;
 
+import java.security.Principal;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +25,9 @@ public class UserService {
 
     public User findByUsername(String username) {
         return userRepository.findByUsername(username);
+    }
+
+    public User getCurrentUser(Principal principal) {
+        return userRepository.findByUsername(principal.getName());
     }
 }
