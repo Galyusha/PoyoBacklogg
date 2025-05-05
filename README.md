@@ -24,13 +24,3 @@ The **PoyoBacklogg** is a full-stack web application designed to help gamers org
 - **npm**: For managing frontend dependencies and running the React app.
 
 ---
-
-### Screenshots
-
-**Registration and Login Page** 
-
-![alt text](<images/registrationlogin.png>)
-
-**Home Page**
-
-![alt text](<images/homepage.png>)
