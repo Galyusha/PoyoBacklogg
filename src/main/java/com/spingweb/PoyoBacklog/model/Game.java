@@ -22,9 +22,10 @@ public class Game {
     private String title;
     private String platform;
     private String genre;
-    private LocalDate releaseDate;
+    private String releaseDate;
     private String imageUrl;
     private Integer hoursPlayed;
+    
     
     @ManyToOne
     @JoinColumn(name = "user_id", referencedColumnName = "id")
@@ -34,7 +35,7 @@ public class Game {
     private Status status;
     
     public enum Status {
-        PLAYING, COMPLETED, BACKLOG, DROPPED, WISHLIST
+        PLAYING, COMPLETED, BACKLOG
     }
 
 }

@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 public class RawgResponse {
-    private List<Game> results;
-    
+    private List<RawgGame> results;
 }
+

@@ -26,13 +26,18 @@ public class GameController {
     private final GameRepository gameRepository;
     
     @GetMapping("/search")
-    public String searchGames(@RequestParam String query, Model model) {
+    public String searchGames(@RequestParam(required = false) String query, Model model) {
+        String baseQuery = "Kirby";
+        String finalQuery = (query != null && !query.isBlank()) ? "Kirby " + query : baseQuery;
+
         try {
-            List<Game> results = rawgService.searchGames(query).get();
+            List<Game> results = rawgService.searchGames(finalQuery).get();
             model.addAttribute("results", results);
+            model.addAttribute("query", query);
         } catch (Exception e) {
             model.addAttribute("error", "Failed to search games");
         }
+
         return "search-results";
     }
     
@@ -52,8 +57,34 @@ public class GameController {
                 gameRepository.save(game);
             });
         
-        return "redirect:/home";
+        return "redirect:/";
     }
+
+    @PostMapping("/add-with-status")
+    public String addGameWithStatus(@RequestParam Long rawgId,
+                                    @RequestParam Game.Status status,
+                                    @AuthenticationPrincipal User user) {
+        
+                                        
+                                        
+        rawgService.getGameDetails(rawgId).thenAccept(gameDetails -> {
+            Game game = new Game();
+            game.setTitle(gameDetails.getTitle());
+            game.setPlatform(gameDetails.getPlatform());
+            game.setGenre(gameDetails.getGenre());
+            game.setReleaseDate(gameDetails.getReleaseDate());
+            game.setImageUrl(gameDetails.getImageUrl());
+            game.setHoursPlayed(gameDetails.getHoursPlayed());
+            game.setUser(user);
+            game.setStatus(status);
+            System.out.println(gameDetails.getTitle());
+            gameRepository.save(game);
+        });
+        
+
+        return "redirect:/games/search";
+    }
+
     
     @PostMapping("/{id}/status")
     public String updateStatus(@PathVariable Long id, 
@@ -62,6 +93,7 @@ public class GameController {
             game.setStatus(status);
             gameRepository.save(game);
         });
-        return "redirect:/home";
+        return "redirect:/search";
     }
+
 }

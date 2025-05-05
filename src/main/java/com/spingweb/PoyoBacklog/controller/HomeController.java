@@ -20,7 +20,7 @@ public class HomeController {
     private final GameService gameService;
     private final UserService userService;
     
-    @GetMapping("/home")
+    @GetMapping("/")
     public String index(Model model, Principal principal) {
         if (principal == null) {
             return "redirect:/register";
@@ -29,6 +29,7 @@ public class HomeController {
         
         model.addAttribute("playingGames", 
             gameService.getGamesByUserAndStatus(user, Game.Status.PLAYING));
+            System.out.println("playingGames: " + gameService.getGamesByUserAndStatus(user, Game.Status.PLAYING));
         model.addAttribute("completedGames", 
             gameService.getGamesByUserAndStatus(user, Game.Status.COMPLETED));
         model.addAttribute("backlogGames", 

@@ -3,31 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Game Tracker</title>
+    <title>Game Tracker - Kirby Edition</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Fun Google Font for Kirby Vibes -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500&display=swap" rel="stylesheet">
+
     <style>
+        body {
+            background: linear-gradient(to bottom right, #ffe6f0, #e0f7fa);
+            font-family: 'Fredoka', sans-serif;
+            color: #333;
+        }
+
+        .navbar {
+            background-color: #ff80ab !important;
+            border-radius: 1rem;
+        }
+
+        .navbar-brand, .nav-link, .btn {
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .nav-tabs .nav-link.active {
+            background-color: #ffd3e0;
+            color: #d81b60;
+            border-radius: 1rem 1rem 0 0;
+        }
+
+        .nav-tabs .nav-link {
+            color: #d81b60;
+            background-color: #fff0f6;
+            border-radius: 1rem 1rem 0 0;
+            margin-right: 5px;
+        }
+
         .game-card {
-            transition: transform 0.2s;
+            border: none;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 16px rgba(255, 192, 203, 0.3);
+            transition: transform 0.2s, box-shadow 0.2s;
         }
+
         .game-card:hover {
-            transform: scale(1.03);
+            transform: scale(1.05);
+            box-shadow: 0 12px 24px rgba(255, 105, 180, 0.5);
         }
-        .status-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
+
+        .card-title {
+            color: #ff4081;
+        }
+
+        .btn-success {
+            background-color: #ffb74d;
+            border-color: #ffb74d;
+            color: #fff;
+            font-weight: bold;
+            border-radius: 12px;
+        }
+
+        .btn-success:hover {
+            background-color: #ffa726;
+        }
+
+        .tab-content {
+            background-color: #fff8fb;
+            border-radius: 0 0 1rem 1rem;
+            padding: 1.5rem;
+        }
+
+        .card-footer {
+            background-color: transparent;
+            border-top: none;
         }
     </style>
 </head>
 <body>
     <div class="container mt-4">
         <!-- Navigation -->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <nav class="navbar navbar-expand-lg navbar-light mb-4 px-4 py-2 shadow-sm">
             <div class="container-fluid">
-                <a class="navbar-brand" href="#">Game Tracker</a>
+                <a class="navbar-brand text-white" href="#">🎮 Game Tracker</a>
                 <div class="d-flex">
-                    <a th:href="@{/games/search}" class="btn btn-outline-light me-2">Search Games</a>
-                    <a th:href="@{/logout}" class="btn btn-outline-danger">Logout</a>
+                    <a th:href="@{/games/search}" class="btn btn-outline-light me-2">🔍 Search Games</a>
+                    <a th:href="@{/logout}" class="btn btn-outline-light">🚪 Logout</a>
                 </div>
             </div>
         </nav>
@@ -35,13 +96,13 @@
         <!-- Status Tabs -->
         <ul class="nav nav-tabs mb-4" id="statusTabs">
             <li class="nav-item">
-                <a class="nav-link active" data-bs-toggle="tab" href="#playing">Playing</a>
+                <a class="nav-link active" data-bs-toggle="tab" href="#playing">✨ Playing</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#completed">Completed</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#completed">🏁 Completed</a>
             </li>
             <li class="nav-item">
-                <a class="nav-link" data-bs-toggle="tab" href="#backlog">Backlog</a>
+                <a class="nav-link" data-bs-toggle="tab" href="#backlog">🕒 Backlog</a>
             </li>
         </ul>
 
@@ -52,15 +113,12 @@
                 <div class="row row-cols-1 row-cols-md-3 g-4">
                     <div class="col" th:each="game : ${playingGames}">
                         <div class="card game-card h-100">
-                            <img th:src="${game.backgroundImage}" class="card-img-top" alt="Game cover">
+                            <img th:src="${game.imageUrl}" class="card-img-top" alt="Game cover" style="height: 200px; object-fit: cover;">
                             <div class="card-body">
-                                <h5 class="card-title" th:text="${game.name}"></h5>
-                                <p class="card-text" th:text="${game.description}"></p>
+                                <h5 class="card-title" th:text="${game.title}"></h5>
+                                <p class="card-text" th:text="${game.genre}"></p>
                             </div>
-                            <div class="card-footer">
-                                <a th:href="@{/games/{id}/status(id=${game.id}, status='COMPLETED')}" 
-                                   class="btn btn-success btn-sm">Mark Completed</a>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -69,14 +127,30 @@
             <!-- Completed Games -->
             <div class="tab-pane fade" id="completed">
                 <div class="row row-cols-1 row-cols-md-3 g-4">
-                    <!-- Similar structure as playing games -->
+                    <div class="col" th:each="game : ${completedGames}">
+                        <div class="card game-card h-100">
+                            <img th:src="${game.imageUrl}" class="card-img-top" alt="Game cover" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${game.title}"></h5>
+                                <p class="card-text" th:text="${game.genre}"></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             <!-- Backlog Games -->
             <div class="tab-pane fade" id="backlog">
                 <div class="row row-cols-1 row-cols-md-3 g-4">
-                    <!-- Similar structure as playing games -->
+                    <div class="col" th:each="game : ${backlogGames}">
+                        <div class="card game-card h-100">
+                            <img th:src="${game.imageUrl}" class="card-img-top" alt="Game cover" style="height: 200px; object-fit: cover;">
+                            <div class="card-body">
+                                <h5 class="card-title" th:text="${game.title}"></h5>
+                                <p class="card-text" th:text="${game.genre}"></p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
